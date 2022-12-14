@@ -1,10 +1,9 @@
 import 'package:e_commerce/const/appcolor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../widget/customButton.dart';
 import '../widget/myTextField.dart';
 import 'bottom_nav_controller.dart';
 
@@ -22,6 +21,7 @@ class _UserFormState extends State<UserForm> {
   TextEditingController genderController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   List<String> gender = ["Male", "Female", "Other"];
+
 
   Future<void> _selectDateFromPicker(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -133,7 +133,30 @@ class _UserFormState extends State<UserForm> {
                   height: 80.h,
                 ),
                 // elevated button
-                customButton("Continue",()=>sendUserDataToDB()),
+                SizedBox(
+                  height: 60.h,
+                  width: 1.sw,
+                  child: ElevatedButton(onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Submitted Successfully",
+                          style: TextStyle(fontSize: 20),),
+                          backgroundColor: Colors.green,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                          ),
+                          margin: EdgeInsets.all(50),
+                        ));
+                    sendUserDataToDB();
+                  },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        primary: AppColor.deepBlue
+                    ),
+                    child: Text("Submit and Continue",
+                      style: TextStyle(fontSize: 18.sp, color: Colors.white),),
+                  ),
+                ),
               ],
             ),
           ),

@@ -24,7 +24,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       "name": widget.product["product-name"],
       "price": widget.product["product-price"],
       "images": widget.product["product-img"],
-    }).then((value) => print("Added to cart"));
+    }).then((value) => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Added to cart successfully",
+          style: TextStyle(fontSize: 20),),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))
+          ),
+          margin: EdgeInsets.all(50),
+        )));
   }
   
   Future addToFavorite() async{
@@ -36,7 +45,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           "price": widget.product["product-price"],
           "images": widget.product["product-img"],
 
-    }).then((value) => print("Added to favorite"));
+    }).then((value) => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Added to favorite successfully",
+          style: TextStyle(fontSize: 20),),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))
+          ),
+          margin: EdgeInsets.all(50),
+        )));
   }
   @override
   Widget build(BuildContext context) {
@@ -69,7 +87,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       child: CircleAvatar(
                         backgroundColor: AppColor.deepBlue,
                         child: IconButton(
-                            onPressed: () => snapshot.data.docs.length == 0 ? addToFavorite() : print("Already added"),
+                            onPressed: () => snapshot.data.docs.length == 0 ? addToFavorite() : ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Already added to favorite",
+                                  style: TextStyle(fontSize: 20),),
+                                  backgroundColor: Colors.green,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20))
+                                  ),
+                                  margin: EdgeInsets.all(50),
+                                )),
                             icon: snapshot.data.docs.length == 0 ?
                             const Icon(Icons.favorite_outline,color:  Colors.white,):
                             const Icon(Icons.favorite, color: Colors.red,)

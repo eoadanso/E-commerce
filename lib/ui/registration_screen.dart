@@ -28,16 +28,53 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       var authCredential = userCredential.user;
       print(authCredential!.uid);
       if(authCredential.uid.isNotEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Signed Up Successfully",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              margin: EdgeInsets.all(50),
+            ));
         Navigator.push(context, CupertinoPageRoute(builder: (_) => UserForm()));
       }else{
-        Fluttertoast.showToast(msg: "Something went wrong");
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Something went wrong",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.redAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              margin: EdgeInsets.all(50),
+            ));
       }
     }on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        Fluttertoast.showToast(msg: "The password provided is too weak.");
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("The provided password is weak",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.redAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              margin: EdgeInsets.all(50),
+            ));
 
       } else if (e.code == 'email-already-in-use') {
-        Fluttertoast.showToast(msg: "The account already exists for that email.");
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("An account already exists for that email",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.redAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              margin: EdgeInsets.all(50),
+            ));
 
       }
     } catch(e){
@@ -229,7 +266,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               elevation: 3,
                             ),
                             child: Text(
-                              "Continue",
+                              "Sign Up",
                               style: TextStyle(
                                   color: Colors.white, fontSize: 18.sp),
                             ),

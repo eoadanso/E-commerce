@@ -5,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import '../widget/customButton.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -19,9 +17,13 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
+  bool isLoading = false;
 
 
   signIn () async {
+    setState(() {
+      isLoading = true;
+    });
     try{
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text,
@@ -30,15 +32,54 @@ class _LoginScreenState extends State<LoginScreen> {
       var authCredential = userCredential.user;
       print(authCredential!.uid);
       if(authCredential.uid.isNotEmpty){
+        setState(() {
+          isLoading = false;
+        });
         Navigator.push(context, CupertinoPageRoute(builder: (_) => BottomNavigatorController()));
       }else{
-        Fluttertoast.showToast(msg: "Something went wrong");
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Something went wrong",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.redAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              margin: EdgeInsets.all(50),
+            ));
       }
     }on FirebaseAuthException catch (e){
       if(e.code == 'user-not-found'){
-        Fluttertoast.showToast(msg: "No user found for that email");
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("No user found for that user",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.redAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+                margin: EdgeInsets.all(50),
+            ));
       }else if(e.code == 'wrong-password'){
-        Fluttertoast.showToast(msg: "Wrong password provided for that user");
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Wrong password provided for that user",
+              style: TextStyle(fontSize: 20),),
+              backgroundColor: Colors.redAccent,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+              ),
+              margin: EdgeInsets.all(50),
+            ));
       }
     } catch(e){
       print(e);
@@ -217,9 +258,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 50.h,
                         ),
                         // elevated button
-                        customButton("Sign In", (){
-                          signIn();
-                        },),
+                        SizedBox(
+                          height: 60.h,
+                          width: 1.sw,
+                          child: ElevatedButton(onPressed: () => signIn(),
+                            style: ElevatedButton.styleFrom(
+                                elevation: 5,
+                                primary: AppColor.deepBlue
+                            ),
+                            child: !isLoading ?
+                            Text("Sign In",
+                              style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                            ): const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: 20.h,
                         ),

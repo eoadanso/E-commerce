@@ -78,7 +78,19 @@ class _ProfileState extends State<Profile> {
             height: 60.h,
             width: 1.sw,
             child: ElevatedButton(
-              onPressed: updateData,
+              onPressed: (){
+                updateData();
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Updated Successfully",
+                      style: TextStyle(fontSize: 20),),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))
+                      ),
+                      margin: EdgeInsets.all(50),
+                    ));
+              },
               style: ElevatedButton.styleFrom(
                 elevation: 5,
                 primary: AppColor.deepBlue
